@@ -38,13 +38,17 @@ def printBoard(listaGrande):
     out += "  " +"┗" + ("━"*9 + "┻")*2 + "━"*9 + "┛"
     print(out)
 
-def qualLinha(letra):
-    if letra == A
 
 def checkLinha(listaGrande, pos_valor):
+    posLetra = ord(pos_valor[0][0]) - ord('A')
+    posNumero = pos_valor[0][1]
+    valor = pos_valor[1]
     #Checar linha VERICAL
     for valorVertical in range(0,9):
         pass
+    for valorColuna in range(9):
+        pass
+
 
 
 #######
