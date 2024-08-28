@@ -8,7 +8,9 @@ def criarBoard():
     for _um in range(9):
         listaGrande.append([])
         for _dois in range(9):
-            listaGrande[_um].append(random.randrange(1,9))
+            # listaGrande[_um].append(random.randrange(1,9))
+            listaGrande[_um].append(0)
+            
     return listaGrande
 
 #######################
@@ -39,16 +41,35 @@ def printBoard(listaGrande):
     print(out)
 
 
-def checkLinha(listaGrande, pos_valor):
+def checkLinha(listaGrande, pos_valor, valor=0) -> bool:
     posLetra = ord(pos_valor[0][0]) - ord('A')
-    posNumero = pos_valor[0][1]
-    valor = pos_valor[1]
+    posNumero = int(pos_valor[0][1]) - 1
+    valor = int(pos_valor[1])
+    ###
     #Checar linha VERICAL
-    for valorVertical in range(0,9):
-        pass
-    for valorColuna in range(9):
-        pass
+    for valorVertical in range(9):
+        if not valorVertical == posNumero:
+            if listaGrande[valorVertical][posLetra] == valor:
+                return False
 
+    for valorColuna in range(9):
+        if not valorColuna == posLetra:
+            if listaGrande[posNumero][valorColuna] == valor:
+                return False
+
+    if posLetra < 3:
+        quadrante = quadrante1
+    elif 3 < posLetra < 6:
+        quadrante = quadrante2
+    else:
+        quadrante = quadrante3
+    
+    for quadranteVertical in range(posNumero//3, (posNumero//3)+3):
+        for casas in listaGrande[quadranteVertical][quadrante]:
+            if casas == valor:
+                return False
+    
+    return True
 
 
 #######
@@ -62,14 +83,29 @@ quadrante3 = slice(6,9)
 #jogo em si
 
 listaGrande = criarBoard()
-printBoard(listaGrande)
-pos = input("LETRA, NUMERO da casa e o valor").split()
-while pos[0][0].upper() not in 'ABCDEFGHI' or pos[0][1] not in '123456789':
-    pos[0] = input("Posição inválida")
-while not 0 < int(pos[1]) < 9:
-    pos[1] = input("Valor inválido")
+###Testes
+listaGrande[2][2] = 2
+####
+while True:
+    printBoard(listaGrande)
+    pos_valor = input("LETRA, NUMERO da casa e o valor").upper().split()
+    while pos_valor[0][0] not in 'ABCDEFGHI' or pos[0][1] not in '123456789':
+        pos_valor[0] = input("Posição inválida")
+    while not 0 < int(pos_valor[1]) < 9:
+        pos_valor[1] = input("Valor inválido")
+    
+    posLetra = ord(pos_valor[0][0]) - ord('A')
+    posNumero = int(pos_valor[0][1]) - 1
+    valor = int(pos_valor[1])
+    if checkLinha(listaGrande, pos_valor):
+        pass # AQUI
 
+
+
+
+verdade = checkLinha(listaGrande, pos)
 print(pos)
+print(verdade)
 
 
 
