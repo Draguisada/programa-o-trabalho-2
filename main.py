@@ -41,10 +41,7 @@ def printBoard(listaGrande):
     print(out)
 
 
-def checkLinha(listaGrande, pos_valor, valor=0) -> bool:
-    posLetra = ord(pos_valor[0][0]) - ord('A')
-    posNumero = int(pos_valor[0][1]) - 1
-    valor = int(pos_valor[1])
+def checkLinha(listaGrande, posLetra, posNumero, valor) -> bool:
     ###
     #Checar linha VERICAL
     for valorVertical in range(9):
@@ -59,20 +56,36 @@ def checkLinha(listaGrande, pos_valor, valor=0) -> bool:
 
     if posLetra < 3:
         quadrante = quadrante1
+        quadrantenslide = list(range(0,3))
     elif 3 < posLetra < 6:
         quadrante = quadrante2
+        quadrantenslide = list(range(3,6))
     else:
         quadrante = quadrante3
+        quadrantenslide = list(range(6,9))
     
-    for quadranteVertical in range(posNumero//3, (posNumero//3)+3):
+    for quadranteVertical in quadrantenslide:
         for casas in listaGrande[quadranteVertical][quadrante]:
             if casas == valor:
                 return False
     
     return True
 
+def criarValores(listaGrande, dificuldade):
+    iteracao = 0
+    while iteracao < dificuldade:
+        pos1 = random.randrange(1, 8)
+        pos2 = random.randrange(1, 8)
+        valor = random.randrange(1, 9)
+        if listaGrande[pos1][pos2] == 0:
+            while not checkLinha(listaGrande, pos1, pos2, valor):
+                    pos1 = random.randrange(1, 8)
+                    pos2 = random.randrange(1, 8)
+                    valor = random.randrange(1, 9)
+            listaGrande[pos1][pos2] = valor
+            iteracao += 1
 
-#######
+####### Criar uma predefinição de quadrante pra ter uma divisão entre as linhas
 quadrante1 = slice(0,3)
 quadrante2 = slice(3,6)
 quadrante3 = slice(6,9)
@@ -80,41 +93,44 @@ quadrante3 = slice(6,9)
 # [Numero da linha] [Quadrante]
 #######
 
+
+
+jogar = 1
+
 #jogo em si
 
 listaGrande = criarBoard()
+
+criarValores(listaGrande, 30)
+
+
 ###Testes
 listaGrande[2][2] = 2
 ####
-while True:
+while jogar == 1:
+
+    ### Ir para o final, ainda pra teste
     printBoard(listaGrande)
-    pos_valor = input("LETRA, NUMERO da casa e o valor").upper().split()
-    while pos_valor[0][0] not in 'ABCDEFGHI' or pos[0][1] not in '123456789':
+    ###
+    pos_valor = input("LETRA, NUMERO da casa e o valor ('casa':A1 'valor':2)" + '\n').upper().split()
+    while pos_valor[0][0].upper() not in 'ABCDEFGHI' or pos_valor[0][1] not in '123456789':
         pos_valor[0] = input("Posição inválida")
-    while not 0 < int(pos_valor[1]) < 9:
+    while not 0 < int(pos_valor[0][1]) < 9 or pos_valor[0][1] == None:
         pos_valor[1] = input("Valor inválido")
     
     posLetra = ord(pos_valor[0][0]) - ord('A')
     posNumero = int(pos_valor[0][1]) - 1
     valor = int(pos_valor[1])
-    if checkLinha(listaGrande, pos_valor):
-        pass # AQUI
 
-
-
-
-verdade = checkLinha(listaGrande, pos)
-print(pos)
-print(verdade)
+    if checkLinha(listaGrande, posLetra, posNumero, valor):
+        listaGrande[posNumero][posLetra] = valor
 
 
 
 
 
-
-
-
-
-
-#Posições
-
+    for range in range(9):
+        if not 0 in listaGrande[range]:
+            jogar = 0
+            break
+print("O jogo acabou!")
