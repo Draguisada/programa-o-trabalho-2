@@ -44,9 +44,9 @@ def printBoard(listaGrande):
         valor = ""
         for cadaItem in listaGrande[linha]:
             if  cadaItem != 0:
-                valor += "⠀"+f"{cadaItem}" + "⠀"
+                valor += " "+f"{cadaItem}" + " "
             else:
-                valor += "⠀⠀⠀"
+                valor += "   "
         out += f"{linha+1} " + "┃" + f"{valor[quadrante1]}" + "┃" + f"{"".join(valor[quadrante2])}" + "┃" + f"{"".join(valor[quadrante3])}" + "┃" + '\n'
     out += "  " +"┣" + ("━"*9 + "╋")*2 + "━"*9 + "┫"
     out += '\n'
@@ -57,9 +57,9 @@ def printBoard(listaGrande):
         valor = ""
         for cadaItem in listaGrande[linha]:
             if  cadaItem != 0:
-                valor += "⠀"+f"{cadaItem}" + "⠀"
+                valor += " "+f"{cadaItem}" + " "
             else:
-                valor += "⠀⠀⠀"
+                valor += "   "
         out += f"{linha+1} " + "┃" + f"{valor[quadrante1]}" + "┃" + f"{"".join(valor[quadrante2])}" + "┃" + f"{"".join(valor[quadrante3])}" + "┃" + '\n'
     out += "  " +"┣" + ("━"*9 + "╋")*2 + "━"*9 + "┫"
     out += '\n'
@@ -70,27 +70,27 @@ def printBoard(listaGrande):
         valor = ""
         for cadaItem in listaGrande[linha]:
             if  cadaItem != 0:
-                valor += "⠀"+f"{cadaItem}" + "⠀"
+                valor += " "+f"{cadaItem}" + " "
             else:
-                valor += "⠀⠀⠀"
+                valor += "   "
         out += f"{linha+1} " + "┃" + f"{valor[quadrante1]}" + "┃" + f"{"".join(valor[quadrante2])}" + "┃" + f"{"".join(valor[quadrante3])}" + "┃" + '\n'
     out += "  " +"┗" + ("━"*9 + "┻")*2 + "━"*9 + "┛"
     print(out)
 
 
 
-def checkLinha(listaGrande, posLetra, posNumero, valor, jogar=0) -> bool:
+def checkLinha(listaGrande, posLetra, posNumero, valor, feedback=0) -> bool:
     ###
     #Checar linha VERICAL
     for checarLinha in range(8):
         if listaGrande[checarLinha][posLetra] == valor:
-            if jogar == 1: print("X - Valor já em coluna") 
+            if feedback == 1: print("X - Valor já em coluna") 
             return False
     
     # Checar Coluna
     for cadaValor in listaGrande[posNumero]:
         if cadaValor  == valor:
-            if jogar == 1: print("X - Valor já em linha")
+            if feedback == 1: print("X - Valor já em linha")
             return False
         
     #Fazendo qual é o quadrante do valor jogado
@@ -103,45 +103,84 @@ def checkLinha(listaGrande, posLetra, posNumero, valor, jogar=0) -> bool:
     else:
         quadrante = quadrante3
         quadrantenslide = 6
-    #Verifica todos os valores no quadrante que o jogador que jogar
+    #Verifica todos os valores no quadrante que o jogador que feedback
     for quadranteVertical in range(0+quadrantenslide, 3+quadrantenslide):
         #Pequena optimização para não contar as casas que não tenham valores
-        if not sum(listaGrande[quadranteVertical][quadrante]) == 0:
-            for casas in listaGrande[quadranteVertical][quadrante]:
-                if casas == valor:
-                    if jogar == 1: print("X - Valor já em quadrante")
-                    return False
+        for casas in listaGrande[quadranteVertical][quadrante]:
+            if casas == valor:
+                if feedback == 1: print("X - Valor já em quadrante")
+                return False
     
     return True
 
-def criarValores(listaGrande, dificuldade):
-    iteracao = 0
-    while iteracao < dificuldade:
-        #Pegar Posições e valores randômicos
+def criarValores(listaGrande, dificuldade, offset=2):
+    
 
-        # REESCREVER TUDO! 123456789 -> 012345678 para todos e dai vai tirando uns ae
+    # Pegar primeiro+criar uma lista de 123456789 com um offset no bloco
+    for quadra in range(1, 3): #Fazer com cada quadrante
+        print("+"*8)
+        offset+=1
+        posicao = offset
+        #offset = random.randrange(1,8)
+        valorAtual = 0
 
-        pos1 = random.randrange(8)
-        pos2 = random.randrange(8)
-        valor = random.randrange(1, 9)
-        # Se essa posição não ter valor:
-        if listaGrande[pos1][pos2] == 0:
-            while not checkLinha(listaGrande, pos2, pos1, valor, 0): # Enquanto o valor não poder ser colocado, ele vai fazer denovo os valores
-                    # Acho que isso não vai dar certo, no final tudo vai pra ->->->-> dai vai descendo
-                    for pos1 in range(0, 8, random.randrange(1,2)):
-                        if listaGrande[pos1][pos2] == 0:
-                            if checkLinha(listaGrande, pos2, pos1, valor, 0):
-                                break
-                        
-                    for pos2 in range(0, 8, random.randrange(1,2)):
-                        if listaGrande[pos1][pos2] == 0:
-                            if checkLinha(listaGrande, pos2, pos1, valor, 0):
-                                break
-                        
-                    valor = random.randrange(1, 9)
-                    
-            listaGrande[pos1][pos2] = valor
-            iteracao += 1
+        # Pegando o quadrante atual para fazer as decisões
+        if 0 < quadra <= 3:
+            quadrante = 0
+        elif 3 < quadra <= 6:
+            quadrante = 3
+        else: 
+            quadrante = 6
+
+        ### Fazer as linhas que o programa deve chegar per local
+        if quadra == 1 or quadra == 4 or quadra == 7:
+            linha = range(0, 3)
+        elif quadra == 2 or quadra == 5 or quadra == 8:
+            linha = range(3, 6) 
+        else: 
+            linha = range(6, 9) 
+            
+        ####
+        for linhaAgora in linha:
+            while True:
+                # ISSO TA DANDO ERRADO, O OFFSET N TA QUEBRANDO A LINHA DIREITO
+                # SE OFFSET FOR MAIOR Q 3 FODE TUDO
+                # Possivelmente reescrever essa parte, o resto ta de boa
+                if posicao >= 3:
+                    if offset <= 3:
+                        posicao = (offset-3) *-1
+                        break
+                    posicao = (offset-3)
+                    break
+                posicaoVertical = max(((3 - offset )  // 1), 0)
+                valorAtual +=1
+                
+                
+                
+                print(f"linhaAgora {linhaAgora}")
+                print(f"posicao {posicao}")
+                print(f"valorAtual: {valorAtual}")
+
+                print(f"offset: {offset}")
+                print(f"quadra: {quadra}")
+                print("-"*6)
+
+                listaGrande[linhaAgora][posicao+quadrante] = valorAtual
+
+
+                
+                if ((posicao+quadrante+1) % 3) == 0:
+                    # listaGrande[linhaAgora][posicao+quadrante] = 0
+                    posicao = 0
+                    print("#"*6)
+                    break
+                posicao += 1
+                
+
+                
+                
+
+
 
 ####### Criar uma predefinição de quadrante pra ter uma divisão entre as linhas
 quadrante1 = slice(0,3)
@@ -158,7 +197,7 @@ listaGrande = criarBoard()
 
 
 
-criarValores(listaGrande, 80)
+criarValores(listaGrande, 10)
 
 
 ###Testes
