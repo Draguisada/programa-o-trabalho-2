@@ -63,7 +63,7 @@ def printBoard(listaGrande, prefix='\x1b[0m'):
             else:
                 valor += "   " # Usando o sistema do ( Prefix - Numero1 - Numero2 - Numero3 - Posfix ) para definir uma cor.
                 # Aqui também é usado o 'quadrante', para ver melhor os valores de cada lugar, sem ser manual toda linha
-        out += f"{linha+1} " + "┃" + prefix + f"{valor[quadrante1]}" + posfix + "┃" + prefix +f"{"".join(valor[quadrante2])}"+ posfix + "┃" + prefix + f"{"".join(valor[quadrante3])}"+ posfix + "┃"  + '\n'
+        out += f"{linha+1} " + "┃" + prefix + f"{valor[quadrante1]}" + posfix + "┃" + prefix +f"{''.join(valor[quadrante2])}"+ posfix + "┃" + prefix + f"{''.join(valor[quadrante3])}"+ posfix + "┃"  + '\n'
     out += "  " +"┣" + ("━"*9 + "╋")*2 + "━"*9 + "┫" # acabando a linha colocando as barreiras
     out += '\n' # Acabando com uma quebra de linha para a próxima linha
 
@@ -76,7 +76,7 @@ def printBoard(listaGrande, prefix='\x1b[0m'):
                 valor += " "+f"{cadaItem}" + " "
             else:
                 valor += "   "
-        out += f"{linha+1} " + "┃" + prefix + f"{valor[quadrante1]}" + posfix + "┃" + prefix +f"{"".join(valor[quadrante2])}"+ posfix + "┃" + prefix + f"{"".join(valor[quadrante3])}"+ posfix + "┃"  + '\n'
+        out += f"{linha+1} " + "┃" + prefix + f"{valor[quadrante1]}" + posfix + "┃" + prefix +f"{''.join(valor[quadrante2])}"+ posfix + "┃" + prefix + f"{''.join(valor[quadrante3])}"+ posfix + "┃"  + '\n'
     out += "  " +"┣" + ("━"*9 + "╋")*2 + "━"*9 + "┫"
     out +=  '\n'
 
@@ -89,7 +89,7 @@ def printBoard(listaGrande, prefix='\x1b[0m'):
                 valor += " "+f"{cadaItem}" + " "
             else:
                 valor += "   "
-        out += f"{linha+1} " + "┃" + prefix + f"{valor[quadrante1]}" + posfix + "┃" + prefix +f"{"".join(valor[quadrante2])}"+ posfix + "┃" + prefix + f"{"".join(valor[quadrante3])}"+ posfix + "┃"  + '\n'
+        out += f"{linha+1} " + "┃" + prefix + f"{valor[quadrante1]}" + posfix + "┃" + prefix +f"{''.join(valor[quadrante2])}"+ posfix + "┃" + prefix + f"{''.join(valor[quadrante3])}"+ posfix + "┃"  + '\n'
     out += "  " +"┗" + ("━"*9 + "┻")*2 + "━"*9 + "┛"
     print(out)
 
